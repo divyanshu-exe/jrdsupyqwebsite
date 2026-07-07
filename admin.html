@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
+
+    <title>CampusArchive Admin Panel</title>
+</head>
+<body>
+   
+
+    <!-- ===========================
+         LOGIN SECTION
+    ============================ -->
+
+    <div id="loginSection">
+
+        <h2>CampusArchive Admin</h2>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Username">
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password">
+
+        <button id="loginBtn">
+            Login
+        </button>
+
+    </div>
+
+
+
+    <!-- ===========================
+         ADMIN PANEL
+    ============================ -->
+
+    <div id="adminPanel" style="display:none;">
+
+        <!-- HEADER -->
+
+        <header class="admin-header">
+
+            <h1>CampusArchive Admin</h1>
+
+            <button id="logoutBtn">
+                🚪 Logout
+            </button>
+
+        </header>
+
+
+
+        <!-- DASHBOARD -->
+
+        <div class="dashboard">
+
+            <div class="dashboard-card">
+
+                <h2 id="adminTotalPapers">0</h2>
+
+                <p>Total Papers</p>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h2 id="adminTotalCourses">0</h2>
+
+                <p>Total Courses</p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- UPLOAD FORM -->
+
+        <section class="form-section">
+
+            <h2>Upload Question Paper</h2>
+
+            <form id="uploadForm">
+
+                <div class="form-grid">
+
+                    <select id="course" required>
+                        <option value="">Select Course</option>
+                        <option>BCA</option>
+                        <option>BBA</option>
+                        <option>BA</option>
+                        <option>B.Com</option>
+                        <option>B.Sc</option>
+                        <option>B.Ed</option>
+                        <option>LLB</option>
+                        <option>MBA</option>
+                        <option>MCA</option>
+                        <option>M.Sc</option>
+                    </select>
+
+
+                    <select id="semester" required>
+
+                        <option value="">Select Semester</option>
+
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                        <option value="7">Semester 7</option>
+                        <option value="8">Semester 8</option>
+
+                    </select>
+
+
+
+                    <input
+                        type="text"
+                        id="subject"
+                        placeholder="Subject Name"
+                        required>
+
+
+
+                    <input
+                        type="text"
+                        id="paperCode"
+                        placeholder="Paper Code"
+                        required>
+
+
+
+                    <select id="examType" required>
+
+                        <option value="">Select Exam Type</option>
+
+                        <option>Mid Semester</option>
+
+                        <option>End Semester</option>
+
+                        <option>Sessional</option>
+
+                        <option>Practical</option>
+
+                        <option>Back Paper</option>
+
+                    </select>
+
+
+
+                    <input
+                        type="text"
+                        id="year"
+                        placeholder="Year"
+                        required>
+
+
+
+                    <input
+                        type="text"
+                        id="session"
+                        placeholder="Session (2025-26)"
+                        required>
+
+
+
+                    <input
+                        type="file"
+                        id="paperFile"
+                        required>
+
+                </div>
+
+
+
+                <div id="previewContainer"></div>
+
+                <button type="submit">
+
+                    Upload Paper
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- PAPER LIST -->
+
+        <section class="papers-section">
+
+            <h2>Uploaded Papers</h2>
+            <input
+    type="text"
+    id="adminSearch"
+    placeholder="🔍 Search by Subject, Course or Paper Code..."
+>
+
+            <div id="paperList"></div>
+
+        </section>
+
+    </div>
+
+    <script src="admin.js"></script>
+
+
+</body>
+</html>
