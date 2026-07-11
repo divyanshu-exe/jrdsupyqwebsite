@@ -314,3 +314,254 @@
     color:#666;
 
 }
+
+/* ==========================================================
+                    CONTRIBUTE SECTION
+========================================================== */
+
+.contribute-section{
+
+    margin-top:80px;
+
+    padding:70px 20px;
+
+    text-align:center;
+
+    background:#162039;
+
+    color:white;
+
+}
+
+.contribute-content{
+
+    max-width:850px;
+
+    margin:auto;
+
+}
+
+.contribute-content h2{
+
+    font-size:2.2rem;
+
+    margin-bottom:15px;
+
+}
+
+.contribute-content p{
+
+    margin:10px 0;
+
+    font-size:17px;
+
+    color:#e5e7eb;
+
+}
+
+.contribute-buttons{
+
+    margin-top:35px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ==========================================================
+                        BUTTONS
+========================================================== */
+
+.primary-btn,
+.secondary-btn{
+
+    padding:14px 28px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.primary-btn{
+
+    background:#fff;
+
+    color:#2563eb;
+
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+
+}
+
+.secondary-btn{
+
+    border:2px solid white;
+
+    color:white;
+
+}
+
+.secondary-btn:hover{
+
+    background:white;
+
+    color:#2563eb;
+
+}
+
+/* ==========================================================
+                        FOOTER
+========================================================== */
+
+.footer{
+
+    background:#0f172a;
+
+    color:#cbd5e1;
+
+}
+
+.footer-container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:70px 20px;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+
+    gap:45px;
+
+}
+
+.footer-column h3{
+
+    color:white;
+
+    margin-bottom:20px;
+
+    font-size:22px;
+
+}
+
+.footer-column h4{
+
+    color:white;
+
+    margin-top:25px;
+
+    margin-bottom:15px;
+
+}
+
+.footer-column p{
+
+    line-height:1.8;
+
+    margin-bottom:12px;
+
+}
+
+.footer-column ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+.footer-column li{
+
+    margin:12px 0;
+
+}
+
+.footer-column a{
+
+    color:#cbd5e1;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+.footer-column a:hover{
+
+    color:#60a5fa;
+
+    padding-left:8px;
+
+}
+
+.social-links{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.footer-bottom{
+
+    border-top:1px solid rgba(255,255,255,.12);
+
+    padding:20px;
+
+    text-align:center;
+
+    font-size:15px;
+
+    color:#94a3b8;
+
+}
+
+/* ==========================================================
+                    RESPONSIVE
+========================================================== */
+
+@media(max-width:768px){
+
+    .footer-container{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+    }
+
+    .social-links{
+
+        align-items:center;
+
+    }
+
+    .contribute-buttons{
+
+        flex-direction:column;
+
+        align-items:center;
+
+    }
+
+}
