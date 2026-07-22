@@ -24,7 +24,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
         // ----------------------------
         if (editPaperId) {
 
-            const response = await fetch(`http://localhost:5000/api/papers/${editPaperId}`, {
+            const response = await fetch(`https://campusarchive-backend.onrender.com/api/papers/${editPaperId}`, {
 
                 method: "PUT",
 
@@ -75,7 +75,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
                 formData.append("paperFile", fileInput.files[0]);
             }
 
-            const response = await fetch("http://localhost:5000/api/papers", {
+            const response = await fetch("https://campusarchive-backend.onrender.com/api/papers", {
 
                 method: "POST",
 
@@ -169,7 +169,7 @@ async function loadDashboardStats() {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/papers/stats");
+        const response = await fetch("https://campusarchive-backend.onrender.com/api/papers/stats");
 
         const stats = await response.json();
 
@@ -194,7 +194,7 @@ async function loadAdminPapers() {
     try {
 
         // Fetch papers from backend
-        const response = await fetch("http://localhost:5000/api/papers");
+        const response = await fetch("https://campusarchive-backend.onrender.com/api/papers");
 
         const papers = await response.json();
 
@@ -296,7 +296,7 @@ async function deletePaper(id) {
 
         const response = await fetch(
 
-            `http://localhost:5000/api/papers/${id}`,
+            `https://campusarchive-backend.onrender.com/api/papers/${id}`,
 
             {
 
@@ -330,7 +330,7 @@ async function editPaper(id) {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/papers");
+        const response = await fetch("https://campusarchive-backend.onrender.com/api/papers");
 
         const papers = await response.json();
 

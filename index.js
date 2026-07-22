@@ -12,7 +12,7 @@ async function loadPapers() {
         const semester = semesterFilter.value;
         const year = yearFilter.value;
 
-        const url = `http://localhost:5000/api/papers?search=${encodeURIComponent(search)}&course=${encodeURIComponent(course)}&semester=${encodeURIComponent(semester)}&year=${encodeURIComponent(year)}`;
+        const url = `https://campusarchive-backend.onrender.com/api/papers?search=${encodeURIComponent(search)}&course=${encodeURIComponent(course)}&semester=${encodeURIComponent(semester)}&year=${encodeURIComponent(year)}`;
 
         const response = await fetch(url);
         const papers = await response.json();
@@ -28,7 +28,7 @@ async function loadStats() {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/stats");
+        const response = await fetch("https://campusarchive-backend.onrender.com/api/papers/stats");
 
         const stats = await response.json();
 
@@ -116,7 +116,7 @@ if (papers.length === 0) {
                     <span>Semester ${paper.semester}</span>
 
                 </div>
-                <a href="http://localhost:5000${paper.pdfUrl}"
+                <a href="${paper.pdfUrl}"
    target="_blank"
    class="view-btn">
 
@@ -125,7 +125,7 @@ if (papers.length === 0) {
 </a>
 
                 <a
-                    href="http://localhost:5000${paper.pdfUrl}"
+                    href="https://campusarchive-backend.onrender.com${paper.pdfUrl}"
                     target="_blank"
                     class="download-btn"
                 >
