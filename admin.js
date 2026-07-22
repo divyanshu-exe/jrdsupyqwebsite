@@ -169,7 +169,7 @@ async function loadDashboardStats() {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/stats");
+        const response = await fetch("http://localhost:5000/api/papers/stats");
 
         const stats = await response.json();
 
