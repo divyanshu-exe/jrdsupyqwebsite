@@ -125,7 +125,7 @@ const uploadPaper = async (req, res) => {
                 const stream = cloudinary.uploader.upload_stream(
                     {
                         folder: "CampusArchive",
-                        resource_type: "raw",
+                        resource_type: "image",
                     },
                     (error, result) => {
                         if (error) return reject(error);
@@ -137,7 +137,7 @@ const uploadPaper = async (req, res) => {
             });
 
         const uploadedFile = await uploadStream();
-console.log("Cloudinary Response:", uploadedFile);
+
         const paper = await Paper.create({
             course,
             semester,
@@ -146,7 +146,7 @@ console.log("Cloudinary Response:", uploadedFile);
             examType,
             year,
             session,
-           pdfUrl: uploadedFile.url,
+           pdfUrl: uploadedFile.secure_url,
 publicId: uploadedFile.public_id,
         });
 
