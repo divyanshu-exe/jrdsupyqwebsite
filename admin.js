@@ -72,7 +72,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
             formData.append("session", document.getElementById("session").value);
 
             if (fileInput.files.length > 0) {
-                formData.append("paperFile", fileInput.files[0]);
+                formData.append("paper", fileInput.files[0]);
             }
 
            const response = await fetch("https://campusarchive-backend.onrender.com/api/papers/upload", {
@@ -87,10 +87,14 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
 });
 
-            if (!response.ok) {
-                throw new Error("Upload failed");
-            }
+           const data = await response.json();
 
+console.log(data);
+
+if (!response.ok) {
+    alert(data.message);
+    return;
+}
             alert("✅ Upload Successful");
 
         }
