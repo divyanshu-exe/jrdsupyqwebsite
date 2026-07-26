@@ -75,13 +75,17 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
                 formData.append("paperFile", fileInput.files[0]);
             }
 
-            const response = await fetch("https://campusarchive-backend.onrender.com/api/papers", {
+           const response = await fetch("https://campusarchive-backend.onrender.com/api/papers/upload", {
 
-                method: "POST",
+    method: "POST",
 
-                body: formData
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    },
 
-            });
+    body: formData
+
+});
 
             if (!response.ok) {
                 throw new Error("Upload failed");
