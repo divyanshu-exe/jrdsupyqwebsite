@@ -4,6 +4,8 @@ const router = express.Router();
 
 const upload = require("../middleware/upload");
 
+const verifyToken = require("../middleware/authMiddleware");
+
 const {
 
     getAllPapers,
@@ -35,13 +37,10 @@ router.get("/stats", getStats);
 // ==========================================
 
 router.post(
-
-    "/",
-
-    upload.single("paperFile"),
-
-    uploadPaper
-
+  "/upload",
+  verifyToken,
+  upload.single("paper"),
+  uploadPaper
 );
 
 // ==========================================
@@ -60,12 +59,6 @@ router.put(
 // DELETE PAPER
 // ==========================================
 
-router.delete(
-
-    "/:id",
-
-    deletePaper
-
-);
+router.delete("/:id", verifyToken, deletePaper);
 
 module.exports = router;

@@ -5,6 +5,7 @@ require("dotenv").config();
 
 // Routes
 const paperRoutes = require("./routes/paperRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -17,6 +18,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 
 app.use(express.json());
+
+
 
 // Serve Uploaded Files
 app.use("/uploads", express.static("uploads"));
@@ -45,6 +48,8 @@ mongoose
 // ==========================================
 
 app.use("/api/papers", paperRoutes);
+
+app.use("/api/auth", authRoutes);
 
 // ==========================================
 // Root Route
