@@ -384,38 +384,46 @@ loadDashboardStats();
 // ADMIN LOGIN
 // ==========================================
 
-// Demo Admin Credentials
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "admin123";
+document.getElementById("loginBtn").addEventListener("click", async () => {
 
-// Login Button
-document.getElementById("loginBtn").addEventListener("click", () => {
-
-    const username = document.getElementById("username").value.trim();
-
+    const email = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    // Check Credentials
-    if (
-        username === ADMIN_USERNAME &&
-        password === ADMIN_PASSWORD
-    ) {
+    try {
 
-        // Hide Login
+        const response = await fetch(
+            "https://campusarchive-backend.onrender.com/api/auth/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message);
+            return;
+        }
+
+        // JWT Token Save
+        localStorage.setItem("token", data.token);
+
         document.getElementById("loginSection").style.display = "none";
-
-        // Show Admin Panel
         document.getElementById("adminPanel").style.display = "block";
-        // Save login status
-        localStorage.setItem("adminLoggedIn", "true");
 
         alert("✅ Login Successful");
 
-    }
+    } catch (err) {
 
-    else {
-
-        alert("❌ Invalid Username or Password");
+        console.error(err);
+        alert("Server Error");
 
     }
 
@@ -424,7 +432,7 @@ document.getElementById("loginBtn").addEventListener("click", () => {
 // CHECK LOGIN STATUS ON PAGE LOAD
 // ==========================================
 
-if (localStorage.getItem("adminLoggedIn") === "true") {
+if (localStorage.getItem("token")) {
 
     document.getElementById("loginSection").style.display = "none";
 
@@ -439,7 +447,7 @@ if (localStorage.getItem("adminLoggedIn") === "true") {
 document.getElementById("logoutBtn").addEventListener("click", () => {
 
     // Remove saved login
-    localStorage.removeItem("adminLoggedIn");
+   localStorage.removeItem("token");
 
     // Hide admin panel
     document.getElementById("adminPanel").style.display = "none";
