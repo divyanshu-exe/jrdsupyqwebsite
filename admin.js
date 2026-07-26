@@ -24,15 +24,17 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
         // ----------------------------
         if (editPaperId) {
 
-            const response = await fetch(`https://campusarchive-backend.onrender.com/api/papers/${editPaperId}`, {
+            const response = await fetch(
+    `https://campusarchive-backend.onrender.com/api/papers/${editPaperId}`,
+    {
+        method: "PUT",
 
-                method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
+        body: JSON.stringify({
 
                     course: document.getElementById("course").value,
                     semester: document.getElementById("semester").value,
@@ -302,17 +304,16 @@ async function deletePaper(id) {
 
     try {
 
-        const response = await fetch(
+       const response = await fetch(
+    `https://campusarchive-backend.onrender.com/api/papers/${id}`,
+    {
+        method: "DELETE",
 
-            `https://campusarchive-backend.onrender.com/api/papers/${id}`,
-
-            {
-
-                method: "DELETE"
-
-            }
-
-        );
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    }
+);
 
         const data = await response.json();
 
