@@ -208,8 +208,24 @@ const deletePaper = async (req, res) => {
         }
 
         // Delete from Cloudinary
-       if (paper.publicId) {
-    await cloudinary.uploader.destroy(paper.publicId);
+if (paper.publicId) {
+
+    let result = await cloudinary.uploader.destroy(
+        paper.publicId,
+        {
+            resource_type: "image",
+        }
+    );
+
+    if (result.result !== "ok") {
+        await cloudinary.uploader.destroy(
+            paper.publicId,
+            {
+                resource_type: "raw",
+            }
+        );
+    }
+
 }
 
         // Delete from MongoDB
