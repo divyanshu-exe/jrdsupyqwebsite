@@ -77,6 +77,11 @@ function displayPapers(papers) {
 
     papers.forEach(paper => {
 
+        const downloadUrl = paper.pdfUrl.replace(
+    "/upload/",
+    "/upload/fl_attachment/"
+);
+
         const card = document.createElement("div");
 
         card.className = "card";
@@ -117,10 +122,8 @@ function displayPapers(papers) {
 
 </a>
 
-                <a
-    href="${paper.pdfUrl}"
-    target="_blank"
-    download
+  <a
+    href="${downloadUrl}"
     class="download-btn"
 >
 
