@@ -49,11 +49,11 @@ function displayPapers(papers) {
 
     grid.innerHTML = "";
     // ==========================================
-// No Papers Found
-// ==========================================
-if (papers.length === 0) {
+    // No Papers Found
+    // ==========================================
+    if (papers.length === 0) {
 
-    grid.innerHTML = `
+        grid.innerHTML = `
 
         <div class="no-paper">
 
@@ -69,18 +69,11 @@ if (papers.length === 0) {
 
     `;
 
-    return;
-
-}
-
-    if (papers.length === 0) {
-        grid.innerHTML = `
-            <p style="grid-column:1/-1;text-align:center;padding:2rem;">
-                No Question Papers Found.
-            </p>
-        `;
         return;
+
     }
+
+ 
 
     papers.forEach(paper => {
 
@@ -125,10 +118,11 @@ if (papers.length === 0) {
 </a>
 
                 <a
-                    href="https://campusarchive-backend.onrender.com${paper.pdfUrl}"
-                    target="_blank"
-                    class="download-btn"
-                >
+    href="${paper.pdfUrl}"
+    target="_blank"
+    download
+    class="download-btn"
+>
 
                 <svg width="18" height="18" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor"
