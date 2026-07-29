@@ -167,3 +167,19 @@ yearFilter.addEventListener("change", filterPapers);
 // First Load
 loadPapers();
 loadStats();
+
+
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.querySelector(".nav-links");
+
+menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+});
+
+// 👇 NAYA CODE — isse link click hote hi menu apne aap band ho jayega
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+    });
+});

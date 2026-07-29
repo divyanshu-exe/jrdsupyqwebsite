@@ -18,23 +18,45 @@
 <body>
 
     <!-- Professional Navbar -->
-    <nav>
-        <navbar>
-            <a href="#" class="logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                CampusArchive
-            </a>
-            <ul class="nav-links">
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Departments</a></li>
-                <li><a href="#">Syllabus</a></li>
-                <li><a href="#">Contribute</a></li>
-            </ul>
-        </navbar>
-    </nav>
+   <nav class="navbar">
+
+    <a href="#" class="logo">
+
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5">
+
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+
+        </svg>
+
+        CampusArchive
+
+    </a>
+
+    <ul class="nav-links">
+
+        <li><a href="#" class="active">Home</a></li>
+
+        <li><a href="#pyqGrid">Question Papers</a></li>
+
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#contact">Contact</a></li>
+
+    </ul>
+
+    <a href="#contribute" class="contribute-btn">
+
+        + Contribute
+
+    </a>
+
+    <div class="menu-toggle" id="menuToggle">
+    ☰
+</div>
+
+</nav>
 
     <!-- Clean Hero Header -->
     <header class="hero">
@@ -43,7 +65,49 @@
             exams.</p>
     </header>
 
-    <section class="stats-section">
+    <section class="about-section" id="about">
+
+    <div class="about-container">
+
+        <h2>Why CampusArchive?</h2>
+
+        <p class="about-text">
+            CampusArchive is a free platform designed to help students easily
+            access previous year question papers. Our goal is to simplify exam
+            preparation by providing organized, verified and easily searchable
+            PYQs for every course.
+        </p>
+
+        <div class="about-cards">
+
+            <div class="about-card">
+                <h3>📄 Verified Papers</h3>
+                <p>Access genuine previous year question papers uploaded by students and admins.</p>
+            </div>
+
+            <div class="about-card">
+                <h3>⚡ Fast Search</h3>
+                <p>Find papers instantly using subject, semester, course and year filters.</p>
+            </div>
+
+            <div class="about-card">
+                <h3>🤝 Community Driven</h3>
+                <p>Students can contribute new papers and help thousands of others prepare better.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+   
+
+    <!-- Main Dynamic Section -->
+    <main class="container">
+
+
+         <section class="stats-section">
 
     <div class="stat-card">
         <h2 id="totalPapers">0</h2>
@@ -56,9 +120,6 @@
     </div>
 
 </section>
-
-    <!-- Main Dynamic Section -->
-    <main class="container">
 
         <!-- Search and Functional Filter System -->
         <section class="search-filter-section">
