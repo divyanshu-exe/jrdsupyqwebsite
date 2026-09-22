@@ -471,8 +471,10 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
     transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.primary-btn { background: var(--crimson); color: #fff; }
-.primary-btn:hover { background: var(--crimson-dark); transform: translateY(-2px); }
+.primary-btn { 
+    background: var(--crimson); color: #fff; }
+.primary-btn:hover { background: var(--crimson-dark); transform: translateY(-2px); 
+}
 
 .secondary-btn { background: transparent; color: var(--paper); border: 1px solid #3A4A68; }
 .secondary-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
@@ -620,4 +622,109 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; scroll-behavior: auto !important; }
+}
+/* ==========================================================
+   QUESTION PAPERS SECTION
+   ========================================================== */
+
+.papers-section {
+    margin-top: 3rem;
+}
+
+.papers-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-label {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--sage);
+    margin-bottom: 6px;
+}
+
+.papers-header h2 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: 5px;
+}
+
+.papers-header p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+}
+/* ==========================================================
+   COLLAPSIBLE QUESTION PAPERS
+   ========================================================== */
+
+.papers-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+
+    background: var(--paper-raised);
+    color: var(--ink);
+
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+
+    padding: 1.2rem 1.4rem;
+
+    transition: var(--transition);
+}
+
+.papers-toggle:hover {
+    border-color: var(--crimson);
+}
+
+.papers-toggle h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin-bottom: 4px;
+}
+
+.papers-toggle p {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.toggle-icon {
+    font-size: 1.2rem;
+    color: var(--crimson);
+    transition: transform 0.25s ease;
+}
+
+/* IMPORTANT */
+.papers-content {
+    display: none;
+    margin-top: 1.5rem;
+}
+
+/* JavaScript active karega */
+.papers-content.active {
+    display: block;
+}
+
+/* Arrow rotate */
+.papers-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+}
+.papers-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+}
+
+.toggle-icon {
+    transition: transform 0.25s ease;
+}
+
+.papers-toggle.active .toggle-icon {
+    transform: rotate(180deg);
 }
