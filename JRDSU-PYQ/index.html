@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRDSU PYQ | Previous Year Question Papers</title>
+    <meta name="description" content="JRDSU PYQ is a student-focused platform to find and access previous year question papers by course, semester, subject, year, and examination.">
+    <meta property="og:title" content="JRDSU PYQ | Previous Year Question Papers">
+    <meta property="og:description" content="Find and access previous year question papers for JRDSU Chitrakoot by course, semester, subject, year, and examination.">
+    <meta property="og:type" content="website">
+    <!-- Google Fonts for Clean Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F6LW70M6D6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F6LW70M6D6');
+</script>
+
+    
+</head>
+
+
+<body>
+
+    <!-- Professional Navbar -->
+   <nav class="navbar">
+
+    <a href="#" class="logo">
+
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5">
+
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+
+        </svg>
+
+        JRDSU PYQ
+
+    </a>
+
+    <ul class="nav-links">
+
+        <li><a href="#" class="active">Home</a></li>
+
+        <li><a href="#pyqGrid">Browse Papers</a></li>
+
+        <li><a href="#filters">Courses</a></li>
+
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#contact">Contact</a></li>
+
+    </ul>
+
+    <a href="#contribute" class="contribute-btn">
+
+        + Contribute
+
+    </a>
+
+    <div class="menu-toggle" id="menuToggle">
+    ☰
+</div>
+
+</nav>
+
+    <!-- Clean Hero Header -->
+    <header class="hero">
+        <h1>Past Year Question Papers</h1>
+        <p>Access structured, verified previous year questions to streamline your preparation and ace your semester
+            exams.</p>
+    </header>
+
+    <section class="about-section" id="about">
+
+    <div class="about-container">
+
+        <h2>Why JRDSU PYQ?</h2>
+
+        <p class="about-text">
+            JRDSU PYQ is a free platform built for Jagadguru Rambhadracharya Divyang
+            State University, Chitrakoot students to easily access previous year
+            question papers. Our goal is to simplify exam preparation by providing
+            organized, verified and easily searchable PYQs for every course.
+        </p>
+
+        <div class="about-cards">
+
+            <div class="about-card">
+                <h3>📄 Verified Papers</h3>
+                <p>Access genuine previous year question papers uploaded by students and admins.</p>
+            </div>
+
+            <div class="about-card">
+                <h3>⚡ Fast Search</h3>
+                <p>Find papers instantly using subject, semester, course and year filters.</p>
+            </div>
+
+            <div class="about-card">
+                <h3>🤝 Community Driven</h3>
+                <p>Students can contribute new papers and help thousands of others prepare better.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+   
+
+    <!-- Main Dynamic Section -->
+    <main class="container">
+
+
+         <section class="stats-section">
+
+    <div class="stat-card">
+        <h2 id="totalPapers">0</h2>
+        <p>Total Papers</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="totalCourses">0</h2>
+        <p>Courses</p>
+    </div>
+
+</section>
+
+        <!-- Search and Functional Filter System -->
+        <section class="search-filter-section" id="filters">
+            <input type="text" id="searchInput" class="search-bar"
+                placeholder="Search by subject name or course code (e.g., Operating Systems, CS301)...">
+
+            <div class="filter-group">
+                <select id="branchFilter">
+    <option value="">All Courses</option>
+    <option value="BCA">BCA</option>
+    <option value="BBA">BBA</option>
+    <option value="BA">BA</option>
+    <option value="B.Com">B.Com</option>
+    <option value="B.Sc">B.Sc</option>
+    <option value="MCA">MCA</option>
+    <option value="MBA">MBA</option>
+</select>
+
+              <select id="semesterFilter">
+    <option value="">All Semesters</option>
+    <option value="1">Semester 1</option>
+    <option value="2">Semester 2</option>
+    <option value="3">Semester 3</option>
+    <option value="4">Semester 4</option>
+    <option value="5">Semester 5</option>
+    <option value="6">Semester 6</option>
+   
+    
+</select>
+
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Dynamic PYQ Grid -->
+       <!-- Question Papers Section -->
+<!-- Question Papers Section -->
+<section class="papers-section">
+
+    <button class="papers-toggle" id="papersToggle" type="button">
+
+        <div>
+            <span class="section-label">ARCHIVE</span>
+            <h2>Available Question Papers</h2>
+            <p>Click to view all available question papers</p>
+        </div>
+
+        <span class="toggle-icon" id="toggleIcon">▼</span>
+
+    </button>
+
+    <div class="papers-content" id="papersContent">
+
+        <section class="pyq-grid" id="pyqGrid">
+            <!-- Cards will be populated dynamically by JavaScript -->
+        </section>
+
+    </div>
+
+</section>
+    <!-- ==========================================
+        CONTRIBUTE SECTION
+========================================== -->
+
+<section class="contribute-section">
+
+    <div class="contribute-content">
+
+        <h2>📚 Help Other Students</h2>
+
+        <p>
+            Have previous year question papers that are not available
+            on JRDSU PYQ?
+        </p>
+
+        <p>
+            Help thousands of students by contributing your PYQs
+            and valuable feedback.
+        </p>
+
+        <div class="contribute-buttons">
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJ4ZvqgiI-hqHJ4DZLzTBnbsBiMm7rAWBWcqpCvZWJ0hKmXA/viewform?usp=header" target="_blank" class="primary-btn">
+
+                📤 Submit Question Paper
+
+            </a>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdfE2Wkf8VesKqtc9aTnEQjDWAVzqGP3fVH5TjKKsGjcaOwGA/viewform?usp=publish-editor" target="_blank" class="secondary-btn">
+
+                ⭐ Give Feedback
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+                FOOTER
+========================================== -->
+
+<footer class="footer">
+
+    <div class="footer-about">
+        <h3 class="footer-brand">JRDSU PYQ</h3>
+        <p>A student-focused platform to find previous year question papers for JRDSU Chitrakoot, organized by course, semester, subject and year.</p>
+    </div>
+
+    <div class="footer-container">
+
+        <!-- ================= QUICK LINKS ================= -->
+
+        <div class="footer-column">
+
+            <h3>Quick Links</h3>
+
+            <ul>
+
+                <li><a href="#">🏠 Home</a></li>
+                <li><a href="#pyqGrid">📄 Browse Papers</a></li>
+                <li><a href="admin.html">⚙ Admin Panel</a></li>
+                <li><a href="#">📧 jrdsutech.team@gmail.com</a></li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= FEEDBACK ================= -->
+
+        <div class="footer-column">
+
+            <h3>Feedback & Contribution</h3>
+
+            <ul>
+
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeJ4ZvqgiI-hqHJ4DZLzTBnbsBiMm7rAWBWcqpCvZWJ0hKmXA/viewform?usp=header" target="_blank">📤 Submit Question Paper</a></li>
+
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdfE2Wkf8VesKqtc9aTnEQjDWAVzqGP3fVH5TjKKsGjcaOwGA/viewform?usp=publish-editor" target="_blank">⭐ Give Feedback</a></li>
+
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfijFNs9vDxdcI0yy4AQVanhaNJeSgDCOfbk9eBoWumIokdEw/viewform?usp=publish-editor" target="_blank">🐞 Report Issue</a></li>
+
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSemy5vU5Q0tE7jtkCG2nFK9PGF8ciB3hDp5WnTQl_JSxPKjXA/viewform?usp=publish-editor" target="_blank">💡 Suggest Feature</a></li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= CONTACT ================= -->
+
+        <div class="footer-column" id="contact">
+
+            <h3>Contact</h3>
+
+            <p>📧 VC@JRDSU.UP.GOV.IN</p>
+
+            <p>📞 +91-05198-224293</p>
+
+            <p>📍Jagadguru Rambhadracharya Divyang State University sitapur,chitrakoot [u.p]</p>
+
+        </div>
+
+        <!-- ================= DEVELOPERS ================= -->
+
+        <div class="footer-column">
+
+            <h3>Developed & Maintained By</h3>
+
+            <div class="developers">
+
+                <div class="developer-card">
+
+                    <h4>👨‍💻 Divyanshu Gupta</h4>
+
+                    <p>B.Tech CSE | NIT AP</p>
+
+                    <div class="developer-links">
+
+                        <a href="https://github.com/divyanshu-exe" target="_blank">
+                            🐙 GitHub
+                        </a>
+
+                        <a href="https://www.linkedin.com/in/divyanshu-gupta-051a3926a/" target="_blank">
+                            💼 LinkedIn
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="developer-card">
+
+                    <h4>👨‍💻 Archit Agrawal</h4>
+
+                    <p>BCA | JRDSU</p>
+
+                    <div class="developer-links">
+
+                        <a href="https://www.linkedin.com/in/archit-agrawal-bb7706338/" target="_blank">
+                            💼 LinkedIn
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>
+            ❤️ Made with Love for JRDSU Students
+        </p>
+
+        <p>
+            © 2026 JRDSU PYQ | All Rights Reserved | Version 1.0.0
+        </p>
+
+    </div>
+
+</footer>
+    <!-- JavaScript Handling Live Filtering + Interactions -->
+ <script src="index.js"></script>
+
+</body>
+</html>
