@@ -403,13 +403,12 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
     flex-wrap: wrap;
     gap: 0.6rem 1rem;
 }
-
-.download-btn {
+.view-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 44px; /* touch target */
+    min-height: 44px;
     background: var(--crimson);
     color: #fff;
     font-family: var(--font-mono);
@@ -418,6 +417,29 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
     border-radius: var(--radius-sm);
     padding: 0.7rem;
     transition: var(--transition);
+}
+
+.view-btn:hover {
+    background: var(--crimson-dark);
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    background: var(--crimson);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 0.7rem;
+    transition: var(--transition);
+
+    /* ADD THIS */
+    margin-top: 8px;
 }
 
 .download-btn:hover { background: var(--crimson-dark); }
