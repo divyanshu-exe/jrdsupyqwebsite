@@ -154,7 +154,8 @@
     <option value="4">Semester 4</option>
     <option value="5">Semester 5</option>
     <option value="6">Semester 6</option>
-   
+    <option value="7">Semester 7</option>
+    <option value="8">Semester 8</option>
     
 </select>
 
@@ -168,31 +169,11 @@
         </section>
 
         <!-- Dynamic PYQ Grid -->
-       <!-- Question Papers Section -->
-<!-- Question Papers Section -->
-<section class="papers-section">
-
-    <button class="papers-toggle" id="papersToggle" type="button">
-
-        <div>
-            <span class="section-label">ARCHIVE</span>
-            <h2>Available Question Papers</h2>
-            <p>Click to view all available question papers</p>
-        </div>
-
-        <span class="toggle-icon" id="toggleIcon">▼</span>
-
-    </button>
-
-    <div class="papers-content" id="papersContent">
-
         <section class="pyq-grid" id="pyqGrid">
             <!-- Cards will be populated dynamically by JavaScript -->
         </section>
+    </main>
 
-    </div>
-
-</section>
     <!-- ==========================================
         CONTRIBUTE SECTION
 ========================================== -->
@@ -215,13 +196,13 @@
 
         <div class="contribute-buttons">
 
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJ4ZvqgiI-hqHJ4DZLzTBnbsBiMm7rAWBWcqpCvZWJ0hKmXA/viewform?usp=header" target="_blank" class="primary-btn">
+            <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" class="primary-btn">
 
                 📤 Submit Question Paper
 
             </a>
 
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdfE2Wkf8VesKqtc9aTnEQjDWAVzqGP3fVH5TjKKsGjcaOwGA/viewform?usp=publish-editor" target="_blank" class="secondary-btn">
+            <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" class="secondary-btn">
 
                 ⭐ Give Feedback
 
@@ -268,11 +249,11 @@
 
                 <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeJ4ZvqgiI-hqHJ4DZLzTBnbsBiMm7rAWBWcqpCvZWJ0hKmXA/viewform?usp=header" target="_blank">📤 Submit Question Paper</a></li>
 
-                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdfE2Wkf8VesKqtc9aTnEQjDWAVzqGP3fVH5TjKKsGjcaOwGA/viewform?usp=publish-editor" target="_blank">⭐ Give Feedback</a></li>
+                <li><a href="YOUR_GOOGLE_FORM_LINK" target="_blank">⭐ Give Feedback</a></li>
 
-                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfijFNs9vDxdcI0yy4AQVanhaNJeSgDCOfbk9eBoWumIokdEw/viewform?usp=publish-editor" target="_blank">🐞 Report Issue</a></li>
+                <li><a href="YOUR_GOOGLE_FORM_LINK" target="_blank">🐞 Report Issue</a></li>
 
-                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSemy5vU5Q0tE7jtkCG2nFK9PGF8ciB3hDp5WnTQl_JSxPKjXA/viewform?usp=publish-editor" target="_blank">💡 Suggest Feature</a></li>
+                <li><a href="YOUR_GOOGLE_FORM_LINK" target="_blank">💡 Suggest Feature</a></li>
 
             </ul>
 
@@ -361,34 +342,6 @@
 </footer>
     <!-- JavaScript Handling Live Filtering Mock Data -->
  <script src="index.js"></script>
-
-<script>
-    // =====================================================
-    // AVAILABLE QUESTION PAPERS - COLLAPSE / EXPAND
-    // =====================================================
-
-    const papersToggle = document.getElementById("papersToggle");
-    const papersContent = document.getElementById("papersContent");
-
-    // Papers initially hidden
-    papersContent.style.display = "none";
-
-    papersToggle.addEventListener("click", function () {
-
-        if (papersContent.style.display === "none") {
-
-            papersContent.style.display = "block";
-            this.classList.add("active");
-
-        } else {
-
-            papersContent.style.display = "none";
-            this.classList.remove("active");
-
-        }
-
-    });
-</script>
-
 </body>
+
 </html>

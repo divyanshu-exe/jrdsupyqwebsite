@@ -183,32 +183,3 @@ document.querySelectorAll(".nav-links a").forEach(link => {
         navLinks.classList.remove("active");
     });
 });
-// ==========================================================
-// COLLAPSIBLE QUESTION PAPERS
-// ==========================================================
-
-const papersToggle = document.getElementById("papersToggle");
-const papersContent = document.getElementById("papersContent");
-
-if (papersToggle && papersContent) {
-
-    // Initially hide papers
-    papersContent.style.display = "none";
-
-    papersToggle.addEventListener("click", () => {
-
-        if (papersContent.style.display === "none") {
-
-            papersContent.style.display = "block";
-            papersToggle.classList.add("active");
-
-        } else {
-
-            papersContent.style.display = "none";
-            papersToggle.classList.remove("active");
-
-        }
-
-    });
-
-}
