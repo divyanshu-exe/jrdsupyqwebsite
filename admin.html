@@ -30,7 +30,7 @@
         <input
             type="text"
             id="username"
-            placeholder="Username">
+            placeholder="Username / Email">
 
         <input
             type="password"
@@ -93,7 +93,7 @@
 
         <section class="form-section">
 
-            <h2>Upload Question Paper</h2>
+            <h2 id="formHeading">Upload Question Paper</h2>
 
             <form id="uploadForm">
 
@@ -168,7 +168,7 @@
                     <input
                         type="text"
                         id="year"
-                        placeholder="Year"
+                        placeholder="Year (e.g. 2024)"
                         required>
 
 
@@ -176,15 +176,21 @@
                     <input
                         type="text"
                         id="session"
-                        placeholder="Session (2025-26)"
+                        placeholder="Session (e.g. 2024-25)"
                         required>
 
 
 
-                    <input
-                        type="file"
-                        id="paperFile"
-                        required>
+                    <div style="grid-column: 1 / -1;">
+                        <label id="fileInputLabel" for="paperFile" style="display:block; margin-bottom:5px; font-size:14px; color:#555;">
+                            Upload Paper File (PDF, JPEG, PNG - Max 15MB)
+                        </label>
+                        <input
+                            type="file"
+                            id="paperFile"
+                            accept="application/pdf,image/*"
+                            required>
+                    </div>
 
                 </div>
 
@@ -192,11 +198,14 @@
 
                 <div id="previewContainer"></div>
 
-                <button type="submit">
-
-                    Upload Paper
-
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button type="submit" id="submitBtn">
+                        Upload Paper
+                    </button>
+                    <button type="button" id="cancelEditBtn" style="display:none; background:#64748b; color:white; border:none; padding:12px 20px; border-radius:8px; cursor:pointer;">
+                        Cancel Edit
+                    </button>
+                </div>
 
             </form>
 
@@ -210,10 +219,9 @@
 
             <h2>Uploaded Papers</h2>
             <input
-    type="text"
-    id="adminSearch"
-    placeholder="🔍 Search by Subject, Course or Paper Code..."
->
+                type="text"
+                id="adminSearch"
+                placeholder="🔍 Search by Subject, Course or Paper Code...">
 
             <div id="paperList"></div>
 
@@ -222,7 +230,6 @@
     </div>
 
     <script src="admin.js"></script>
-
 
 </body>
 </html>

@@ -16,13 +16,17 @@ const fileFilter = (req, file, cb) => {
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error("Only PDF and Image files are allowed."));
+        cb(new Error("Only PDF and Image files (JPEG, PNG, WEBP) are allowed."));
     }
 };
 
+// 15 MB File Size Limit to protect server memory
 const upload = multer({
     storage,
     fileFilter,
+    limits: {
+        fileSize: 15 * 1024 * 1024, // 15 MB
+    },
 });
 
 module.exports = upload;

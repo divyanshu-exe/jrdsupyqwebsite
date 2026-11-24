@@ -2,66 +2,72 @@ const Paper = require("../models/Paper");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 
+// Helper to escape regex special characters to prevent ReDoS / injection
+const escapeRegex = (str) => {
+    return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+// Helper for streaming upload to Cloudinary
+const uploadToCloudinary = (fileBuffer) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "CampusArchive",
+                resource_type: "auto",
+            },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+        );
+
+        streamifier.createReadStream(fileBuffer).pipe(stream);
+    });
+};
+
 // ==========================================
 // GET ALL PAPERS
 // ==========================================
 
 const getAllPapers = async (req, res) => {
-
     try {
-
         const { search, course, semester, year } = req.query;
 
         let query = {};
 
-        if (search) {
+        if (search && search.trim()) {
+            const sanitizedSearch = escapeRegex(search.trim());
 
             query.$or = [
-
                 {
                     subject: {
-                        $regex: search,
-                        $options: "i"
-                    }
+                        $regex: sanitizedSearch,
+                        $options: "i",
+                    },
                 },
-
                 {
                     paperCode: {
-                        $regex: search,
-                        $options: "i"
-                    }
-                }
-
+                        $regex: sanitizedSearch,
+                        $options: "i",
+                    },
+                },
             ];
-
         }
 
         if (course) query.course = course;
-
         if (semester) query.semester = semester;
-
         if (year) query.year = year;
 
         const papers = await Paper.find(query).sort({
-
-            createdAt: -1
-
+            createdAt: -1,
         });
 
         res.json(papers);
-
-    }
-
-    catch (err) {
-
+    } catch (err) {
         res.status(500).json({
-
-            error: err.message
-
+            error: err.message,
         });
-
     }
-
 };
 
 // ==========================================
@@ -69,33 +75,19 @@ const getAllPapers = async (req, res) => {
 // ==========================================
 
 const getStats = async (req, res) => {
-
     try {
-
         const totalPapers = await Paper.countDocuments();
-
         const totalCourses = await Paper.distinct("course");
 
         res.json({
-
             totalPapers,
-
-            totalCourses: totalCourses.length
-
+            totalCourses: totalCourses.length,
         });
-
-    }
-
-    catch (err) {
-
+    } catch (err) {
         res.status(500).json({
-
-            error: err.message
-
+            error: err.message,
         });
-
     }
-
 };
 
 // ==========================================
@@ -120,23 +112,7 @@ const uploadPaper = async (req, res) => {
             });
         }
 
-        const uploadStream = () =>
-            new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    {
-                        folder: "CampusArchive",
-                        resource_type: "image",
-                    },
-                    (error, result) => {
-                        if (error) return reject(error);
-                        resolve(result);
-                    }
-                );
-
-                streamifier.createReadStream(req.file.buffer).pipe(stream);
-            });
-
-        const uploadedFile = await uploadStream();
+        const uploadedFile = await uploadToCloudinary(req.file.buffer);
 
         const paper = await Paper.create({
             course,
@@ -146,18 +122,17 @@ const uploadPaper = async (req, res) => {
             examType,
             year,
             session,
-           pdfUrl: uploadedFile.secure_url,
-publicId: uploadedFile.public_id,
+            pdfUrl: uploadedFile.secure_url,
+            publicId: uploadedFile.public_id,
         });
 
         res.status(201).json(paper);
-    }catch (err) {
-    console.error("Upload Error:", err);
-
-    res.status(500).json({
-        error: err.message,
-    });
-}
+    } catch (err) {
+        console.error("Upload Error:", err);
+        res.status(500).json({
+            error: err.message,
+        });
+    }
 };
 
 // ==========================================
@@ -165,32 +140,55 @@ publicId: uploadedFile.public_id,
 // ==========================================
 
 const updatePaper = async (req, res) => {
-
     try {
+        let updateData = { ...req.body };
 
-      const paper = await Paper.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-        new: true,
-        runValidators: true,
-    }
-);
+        // If a new file is uploaded during edit, replace on Cloudinary
+        if (req.file) {
+            const existingPaper = await Paper.findById(req.params.id);
+            if (!existingPaper) {
+                return res.status(404).json({ message: "Paper not found" });
+            }
+
+            // Upload new file
+            const uploadedFile = await uploadToCloudinary(req.file.buffer);
+            updateData.pdfUrl = uploadedFile.secure_url;
+            updateData.publicId = uploadedFile.public_id;
+
+            // Delete old file from Cloudinary
+            if (existingPaper.publicId) {
+                try {
+                    await cloudinary.uploader.destroy(existingPaper.publicId, {
+                        resource_type: "raw",
+                    });
+                    await cloudinary.uploader.destroy(existingPaper.publicId, {
+                        resource_type: "image",
+                    });
+                } catch (cErr) {
+                    console.warn("Could not delete old asset from Cloudinary:", cErr.message);
+                }
+            }
+        }
+
+        const paper = await Paper.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        if (!paper) {
+            return res.status(404).json({ message: "Paper not found" });
+        }
 
         res.json(paper);
-
-    }
-
-    catch (err) {
-
+    } catch (err) {
         res.status(500).json({
-
-            error: err.message
-
+            error: err.message,
         });
-
     }
-
 };
 
 // ==========================================
@@ -208,25 +206,21 @@ const deletePaper = async (req, res) => {
         }
 
         // Delete from Cloudinary
-if (paper.publicId) {
+        if (paper.publicId) {
+            try {
+                let result = await cloudinary.uploader.destroy(paper.publicId, {
+                    resource_type: "image",
+                });
 
-    let result = await cloudinary.uploader.destroy(
-        paper.publicId,
-        {
-            resource_type: "image",
-        }
-    );
-
-    if (result.result !== "ok") {
-        await cloudinary.uploader.destroy(
-            paper.publicId,
-            {
-                resource_type: "raw",
+                if (result.result !== "ok") {
+                    await cloudinary.uploader.destroy(paper.publicId, {
+                        resource_type: "raw",
+                    });
+                }
+            } catch (cErr) {
+                console.warn("Cloudinary delete error:", cErr.message);
             }
-        );
-    }
-
-}
+        }
 
         // Delete from MongoDB
         await Paper.findByIdAndDelete(req.params.id);
@@ -236,7 +230,6 @@ if (paper.publicId) {
         });
     } catch (err) {
         console.error(err);
-
         res.status(500).json({
             error: err.message,
         });

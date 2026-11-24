@@ -456,6 +456,55 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
 .no-paper h2 { color: var(--crimson); margin-bottom: 10px; font-size: clamp(1.2rem, 3vw, 1.5rem); }
 .no-paper p { color: var(--ink-soft); }
 
+.loading-box {
+    grid-column: 1 / -1;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 16px;
+    border: 3px solid var(--line);
+    border-top: 3px solid var(--crimson);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.server-wake-hint {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: 500;
+}
+
+.retry-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 18px;
+    background: var(--crimson);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.retry-btn:hover {
+    background: var(--crimson-dark);
+}
+
 /* ==========================================================
    CONTRIBUTE SECTION
    ========================================================== */

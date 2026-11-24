@@ -50,6 +50,7 @@ router.post(
 router.put(
     "/:id",
     verifyToken,
+    upload.single("paper"),
     updatePaper
 );
 
