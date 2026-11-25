@@ -9,3 +9,7 @@ backend/.env
 # OS
 .DS_Store
 Thumbs.db
+
+# Netlify
+.netlify/
+_site/
