@@ -45,6 +45,10 @@ html {
     -webkit-text-size-adjust: 100%;
 }
 
+#about, #pyqGrid, #contribute, #contact {
+    scroll-margin-top: var(--nav-height);
+}
+
 body {
     font-family: var(--font-body);
     background: var(--paper);
@@ -154,6 +158,8 @@ h1, h2, h3, h4 {
 }
 
 .contribute-btn:hover { background: var(--crimson-dark); transform: translateY(-1px); }
+
+.nav-mobile-contribute { display: none; }
 
 .menu-toggle {
     display: none;
@@ -849,6 +855,26 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
 
     .nav-links.active { transform: translateX(0); }
     .nav-links a { font-size: 1.02rem; width: 100%; }
+
+    .nav-mobile-contribute {
+        display: block;
+        width: 100%;
+        margin-top: 4px;
+    }
+
+    .nav-mobile-contribute a {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        background: var(--crimson);
+        padding: 12px 18px;
+        border-radius: var(--radius-sm);
+        text-align: center;
+    }
+
+    .nav-mobile-contribute a::after { display: none; }
 
     .about-cards { grid-template-columns: 1fr; }
     .stats-section { grid-template-columns: repeat(2, 1fr); gap: 12px; }
