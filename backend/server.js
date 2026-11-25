@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const compression = require("compression");
 require("dotenv").config();
 
 // Routes
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 5000;
 // ==========================================
 // Middlewares
 // ==========================================
+
+app.use(compression());
 
 app.use(cors());
 
@@ -29,7 +32,11 @@ app.use("/uploads", express.static("uploads"));
 // ==========================================
 
 mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, {
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+    })
     .then(() => {
 
         console.log("✅ Connected to MongoDB successfully.");
@@ -46,6 +53,14 @@ mongoose
 // ==========================================
 // API Routes
 // ==========================================
+
+app.get("/api/health", (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: Math.round(process.uptime()),
+        dbReadyState: mongoose.connection.readyState,
+    });
+});
 
 app.use("/api/papers", paperRoutes);
 

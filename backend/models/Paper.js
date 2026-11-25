@@ -56,5 +56,11 @@ const paperSchema = new mongoose.Schema(
     }
 );
 
+// Indexes for fast filtering and sorting
+paperSchema.index({ createdAt: -1 });
+paperSchema.index({ course: 1, semester: 1, year: 1, createdAt: -1 });
+paperSchema.index({ subject: 1 });
+paperSchema.index({ paperCode: 1 });
+
 // Export Model
 module.exports = mongoose.model("Paper", paperSchema);

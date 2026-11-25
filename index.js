@@ -7,6 +7,9 @@ const API_BASE = window.location.hostname === "localhost" || window.location.hos
     ? "http://localhost:5000/api"
     : "https://campusarchive-backend.onrender.com/api";
 
+const PAPERS_CACHE_KEY = "ca_papers_cache_v1";
+const STATS_CACHE_KEY = "ca_stats_cache_v1";
+
 const grid = document.getElementById("pyqGrid");
 const searchInput = document.getElementById("searchInput");
 const branchFilter = document.getElementById("branchFilter");
@@ -17,6 +20,26 @@ const totalCoursesEl = document.getElementById("totalCourses");
 
 let activeAbortController = null;
 let wakeTimer = null;
+let lastRenderedSignature = null;
+let cachedAllPapers = readCache(PAPERS_CACHE_KEY);
+
+// Safe localStorage Helpers
+function readCache(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function writeCache(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+        // Ignore storage quota or private mode errors
+    }
+}
 
 // Debounce helper
 function debounce(func, wait) {
@@ -27,8 +50,25 @@ function debounce(func, wait) {
     };
 }
 
+// Filter cached papers locally for instant (0ms) UI response
+function filterLocalPapers(papers, { search, course, semester, year }) {
+    const q = (search || "").toLowerCase();
+    return papers.filter((paper) => {
+        if (course && paper.course !== course) return false;
+        if (semester && String(paper.semester) !== String(semester)) return false;
+        if (year && String(paper.year) !== String(year)) return false;
+        if (q) {
+            const subject = (paper.subject || "").toLowerCase();
+            const code = (paper.paperCode || "").toLowerCase();
+            if (!subject.includes(q) && !code.includes(q)) return false;
+        }
+        return true;
+    });
+}
+
 // Show Loading State in Grid
 function showLoading() {
+    lastRenderedSignature = null;
     grid.innerHTML = `
         <div class="loading-box">
             <div class="spinner"></div>
@@ -49,6 +89,7 @@ function showLoading() {
 // Show Error State in Grid
 function showError(message) {
     clearTimeout(wakeTimer);
+    lastRenderedSignature = null;
     grid.innerHTML = `
         <div class="no-paper">
             <h2>⚠️ Connection Issue</h2>
@@ -58,22 +99,30 @@ function showError(message) {
     `;
 }
 
-// Load papers from backend
+// Render papers immediately from cache if available, then revalidate with backend
 async function loadPapers() {
-    // Abort any ongoing request to avoid race conditions
     if (activeAbortController) {
         activeAbortController.abort();
     }
     activeAbortController = new AbortController();
 
-    showLoading();
+    const search = (searchInput.value || "").trim();
+    const course = branchFilter.value || "";
+    const semester = semesterFilter.value || "";
+    const year = yearFilter.value || "";
+    const hasFilters = Boolean(search || course || semester || year);
+    const hasLocalCache = Array.isArray(cachedAllPapers);
+
+    if (hasLocalCache) {
+        const instantList = hasFilters
+            ? filterLocalPapers(cachedAllPapers, { search, course, semester, year })
+            : cachedAllPapers;
+        displayPapers(instantList);
+    } else {
+        showLoading();
+    }
 
     try {
-        const search = (searchInput.value || "").trim();
-        const course = branchFilter.value || "";
-        const semester = semesterFilter.value || "";
-        const year = yearFilter.value || "";
-
         const queryParams = new URLSearchParams();
         if (search) queryParams.append("search", search);
         if (course) queryParams.append("course", course);
@@ -89,24 +138,40 @@ async function loadPapers() {
 
         const papers = await response.json();
         clearTimeout(wakeTimer);
+
+        if (!hasFilters) {
+            cachedAllPapers = papers;
+            writeCache(PAPERS_CACHE_KEY, papers);
+        }
+
         displayPapers(papers);
     } catch (error) {
         if (error.name === "AbortError") {
-            // Request was cancelled for a newer request; do nothing
             return;
         }
         console.error("Error loading papers:", error);
-        showError("Could not load papers. The server might be waking up or offline.");
+        clearTimeout(wakeTimer);
+
+        if (!hasLocalCache) {
+            showError("Could not load papers. The server might be waking up or offline.");
+        }
     }
 }
 
-// Load Dashboard Aggregate Statistics
+// Load Dashboard Aggregate Statistics (Cache first, then fresh)
 async function loadStats() {
+    const cachedStats = readCache(STATS_CACHE_KEY);
+    if (cachedStats) {
+        if (totalPapersEl) totalPapersEl.textContent = cachedStats.totalPapers || 0;
+        if (totalCoursesEl) totalCoursesEl.textContent = cachedStats.totalCourses || 0;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/papers/stats`);
         if (!response.ok) return;
 
         const stats = await response.json();
+        writeCache(STATS_CACHE_KEY, stats);
         if (totalPapersEl) totalPapersEl.textContent = stats.totalPapers || 0;
         if (totalCoursesEl) totalCoursesEl.textContent = stats.totalCourses || 0;
     } catch (error) {
@@ -114,12 +179,22 @@ async function loadStats() {
     }
 }
 
-// Display Cards
+// Display Cards (Diff-checked to prevent unnecessary re-renders)
 function displayPapers(papers) {
+    const safePapers = Array.isArray(papers) ? papers : [];
+    const signature = JSON.stringify(
+        safePapers.map((p) => [p._id, p.subject, p.paperCode, p.course, p.semester, p.year, p.examType, p.pdfUrl])
+    );
+
+    if (signature === lastRenderedSignature) {
+        return;
+    }
+    lastRenderedSignature = signature;
+
     grid.innerHTML = "";
 
     // No Papers Found State
-    if (!papers || papers.length === 0) {
+    if (safePapers.length === 0) {
         grid.innerHTML = `
             <div class="no-paper">
                 <h2>📄 No Question Papers Found</h2>
@@ -129,8 +204,9 @@ function displayPapers(papers) {
         return;
     }
 
-    papers.forEach(paper => {
-        // Safe download url transformation for Cloudinary attachments
+    const fragment = document.createDocumentFragment();
+
+    safePapers.forEach(paper => {
         let downloadUrl = paper.pdfUrl || "#";
         if (downloadUrl.includes("/upload/")) {
             downloadUrl = downloadUrl.replace("/upload/", "/upload/fl_attachment/");
@@ -178,8 +254,10 @@ function displayPapers(papers) {
             </div>
         `;
 
-        grid.appendChild(card);
+        fragment.appendChild(card);
     });
+
+    grid.appendChild(fragment);
 }
 
 // Helper to escape HTML characters in dynamic strings
@@ -193,12 +271,24 @@ function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-// Event Listeners with Debounce for search
+// Event Listeners: instant local filter + debounced server sync
 const debouncedLoadPapers = debounce(() => {
     loadPapers();
 }, 300);
 
-searchInput.addEventListener("input", debouncedLoadPapers);
+searchInput.addEventListener("input", () => {
+    if (Array.isArray(cachedAllPapers)) {
+        const instantList = filterLocalPapers(cachedAllPapers, {
+            search: (searchInput.value || "").trim(),
+            course: branchFilter.value || "",
+            semester: semesterFilter.value || "",
+            year: yearFilter.value || "",
+        });
+        displayPapers(instantList);
+    }
+    debouncedLoadPapers();
+});
+
 branchFilter.addEventListener("change", loadPapers);
 semesterFilter.addEventListener("change", loadPapers);
 yearFilter.addEventListener("change", loadPapers);

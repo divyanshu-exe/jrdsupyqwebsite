@@ -58,9 +58,10 @@ const getAllPapers = async (req, res) => {
         if (semester) query.semester = semester;
         if (year) query.year = year;
 
-        const papers = await Paper.find(query).sort({
-            createdAt: -1,
-        });
+        const papers = await Paper.find(query)
+            .select("-publicId -__v")
+            .sort({ createdAt: -1 })
+            .lean();
 
         res.json(papers);
     } catch (err) {
@@ -76,8 +77,10 @@ const getAllPapers = async (req, res) => {
 
 const getStats = async (req, res) => {
     try {
-        const totalPapers = await Paper.countDocuments();
-        const totalCourses = await Paper.distinct("course");
+        const [totalPapers, totalCourses] = await Promise.all([
+            Paper.countDocuments(),
+            Paper.distinct("course"),
+        ]);
 
         res.json({
             totalPapers,
