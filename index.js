@@ -1,5 +1,5 @@
 // ==========================================
-// CAMPUSARCHIVE - STUDENT PORTAL SCRIPT
+// JRDSU PYQ (CAMPUSARCHIVE) - STUDENT PORTAL SCRIPT
 // ==========================================
 
 // Configurable API URL (Local vs Production)
@@ -15,6 +15,8 @@ const searchInput = document.getElementById("searchInput");
 const branchFilter = document.getElementById("branchFilter");
 const semesterFilter = document.getElementById("semesterFilter");
 const yearFilter = document.getElementById("yearFilter");
+const filterActions = document.getElementById("filterActions");
+const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 const totalPapersEl = document.getElementById("totalPapers");
 const totalCoursesEl = document.getElementById("totalCourses");
 
@@ -48,6 +50,90 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
+}
+
+// Build clean Cloudinary fl_attachment filename from paper metadata
+function sanitizeAttachmentName(paper) {
+    const raw = [paper.subject, paper.paperCode, paper.year]
+        .filter(Boolean)
+        .join("_");
+    const clean = raw
+        .replace(/[^a-zA-Z0-9_-]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 80);
+    return clean || "JRDSU_PYQ_Paper";
+}
+
+function buildDownloadUrl(paper) {
+    const url = paper.pdfUrl || "#";
+    if (!url.includes("/upload/")) return url;
+    const attachmentName = sanitizeAttachmentName(paper);
+    return url.replace("/upload/", `/upload/fl_attachment:${attachmentName}/`);
+}
+
+// Dynamically sync dropdown filters with available database courses, semesters & years
+function populateSelectOptions(selectEl, defaultLabel, values, formatLabel) {
+    if (!selectEl || values.length === 0) return;
+
+    const currentVal = selectEl.value;
+    const fragment = document.createDocumentFragment();
+
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = defaultLabel;
+    fragment.appendChild(defaultOpt);
+
+    values.forEach((val) => {
+        const opt = document.createElement("option");
+        opt.value = val;
+        opt.textContent = formatLabel ? formatLabel(val) : val;
+        fragment.appendChild(opt);
+    });
+
+    selectEl.innerHTML = "";
+    selectEl.appendChild(fragment);
+
+    if (currentVal && values.includes(currentVal)) {
+        selectEl.value = currentVal;
+    }
+}
+
+function syncFilterOptions(papers) {
+    if (!Array.isArray(papers) || papers.length === 0) return;
+
+    const courses = [...new Set(papers.map((p) => (p.course || "").trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+
+    const semesters = [...new Set(papers.map((p) => String(p.semester || "").trim()).filter(Boolean))]
+        .sort((a, b) => Number(a) - Number(b));
+
+    const years = [...new Set(papers.map((p) => String(p.year || "").trim()).filter(Boolean))]
+        .sort((a, b) => Number(b) - Number(a));
+
+    populateSelectOptions(branchFilter, "All Courses", courses);
+    populateSelectOptions(semesterFilter, "All Semesters", semesters, (v) => `Semester ${v}`);
+    populateSelectOptions(yearFilter, "All Years", years);
+}
+
+// Toggle visibility of Reset Filters button
+function updateFilterActionsUI() {
+    if (!filterActions) return;
+    const hasActiveFilters = Boolean(
+        (searchInput.value || "").trim() ||
+        branchFilter.value ||
+        semesterFilter.value ||
+        yearFilter.value
+    );
+    filterActions.hidden = !hasActiveFilters;
+}
+
+function resetFilters() {
+    searchInput.value = "";
+    branchFilter.value = "";
+    semesterFilter.value = "";
+    yearFilter.value = "";
+    updateFilterActionsUI();
+    loadPapers();
 }
 
 // Filter cached papers locally for instant (0ms) UI response
@@ -106,6 +192,8 @@ async function loadPapers() {
     }
     activeAbortController = new AbortController();
 
+    updateFilterActionsUI();
+
     const search = (searchInput.value || "").trim();
     const course = branchFilter.value || "";
     const semester = semesterFilter.value || "";
@@ -114,6 +202,7 @@ async function loadPapers() {
     const hasLocalCache = Array.isArray(cachedAllPapers);
 
     if (hasLocalCache) {
+        syncFilterOptions(cachedAllPapers);
         const instantList = hasFilters
             ? filterLocalPapers(cachedAllPapers, { search, course, semester, year })
             : cachedAllPapers;
@@ -142,6 +231,7 @@ async function loadPapers() {
         if (!hasFilters) {
             cachedAllPapers = papers;
             writeCache(PAPERS_CACHE_KEY, papers);
+            syncFilterOptions(papers);
         }
 
         displayPapers(papers);
@@ -198,7 +288,8 @@ function displayPapers(papers) {
         grid.innerHTML = `
             <div class="no-paper">
                 <h2>📄 No Question Papers Found</h2>
-                <p>Try changing Course, Semester or Search Keyword.</p>
+                <p>Try changing Course, Semester, Year or Search Keyword.</p>
+                <button type="button" class="retry-btn" onclick="resetFilters()">✕ Reset Filters</button>
             </div>
         `;
         return;
@@ -207,10 +298,7 @@ function displayPapers(papers) {
     const fragment = document.createDocumentFragment();
 
     safePapers.forEach(paper => {
-        let downloadUrl = paper.pdfUrl || "#";
-        if (downloadUrl.includes("/upload/")) {
-            downloadUrl = downloadUrl.replace("/upload/", "/upload/fl_attachment/");
-        }
+        const downloadUrl = buildDownloadUrl(paper);
 
         const card = document.createElement("div");
         card.className = "card";
@@ -241,7 +329,7 @@ function displayPapers(papers) {
                     👁 View Paper
                 </a>
 
-                <a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" download class="download-btn">
+                <a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" download="${escapeHtml(sanitizeAttachmentName(paper))}.pdf" class="download-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -277,6 +365,7 @@ const debouncedLoadPapers = debounce(() => {
 }, 300);
 
 searchInput.addEventListener("input", () => {
+    updateFilterActionsUI();
     if (Array.isArray(cachedAllPapers)) {
         const instantList = filterLocalPapers(cachedAllPapers, {
             search: (searchInput.value || "").trim(),
@@ -292,23 +381,53 @@ searchInput.addEventListener("input", () => {
 branchFilter.addEventListener("change", loadPapers);
 semesterFilter.addEventListener("change", loadPapers);
 yearFilter.addEventListener("change", loadPapers);
+if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener("click", resetFilters);
+}
 
 // Initial Load
 loadPapers();
 loadStats();
 
-// Mobile Navigation Menu Toggle
+// Mobile Navigation Drawer (Accessible toggle + backdrop + Escape)
 const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.querySelector(".nav-links");
+const navOverlay = document.getElementById("navOverlay");
+
+function setMobileMenuState(isOpen) {
+    if (!menuToggle || !navLinks) return;
+    navLinks.classList.toggle("active", isOpen);
+    if (navOverlay) navOverlay.classList.toggle("active", isOpen);
+    document.body.classList.toggle("no-scroll", isOpen);
+    menuToggle.textContent = isOpen ? "✕" : "☰";
+    menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+}
 
 if (menuToggle && navLinks) {
     menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
+        const willOpen = !navLinks.classList.contains("active");
+        setMobileMenuState(willOpen);
+    });
+
+    menuToggle.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            const willOpen = !navLinks.classList.contains("active");
+            setMobileMenuState(willOpen);
+        }
+    });
+
+    if (navOverlay) {
+        navOverlay.addEventListener("click", () => setMobileMenuState(false));
+    }
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navLinks.classList.contains("active")) {
+            setMobileMenuState(false);
+        }
     });
 
     document.querySelectorAll(".nav-links a").forEach(link => {
-        link.addEventListener("click", () => {
-            navLinks.classList.remove("active");
-        });
+        link.addEventListener("click", () => setMobileMenuState(false));
     });
 }

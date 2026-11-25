@@ -9,6 +9,12 @@
     font-family:"Segoe UI",sans-serif;
 }
 
+html, body{
+
+    overflow-x:clip;
+
+}
+
 body{
 
     background:#f4f7fc;
@@ -25,7 +31,9 @@ body{
 
 #loginSection{
 
-    width:380px;
+    width:100%;
+
+    max-width:380px;
 
     margin:80px auto;
 
@@ -372,7 +380,8 @@ body{
 
 }
 
-.paper-actions button{
+.paper-actions button,
+.paper-actions a{
 
     border:none;
 
@@ -383,6 +392,8 @@ body{
     cursor:pointer;
 
     color:white;
+
+    font-size:14px;
 
     transition:.3s;
 
@@ -435,7 +446,15 @@ body{
 
     body{
 
-        padding:15px;
+        padding:16px;
+
+    }
+
+    #loginSection{
+
+        margin:36px auto;
+
+        padding:24px 20px;
 
     }
 
@@ -444,6 +463,13 @@ body{
         flex-direction:column;
 
         gap:20px;
+
+    }
+
+    .form-section,
+    .papers-section{
+
+        padding:20px;
 
     }
 
@@ -467,9 +493,12 @@ body{
 
         width:100%;
 
+        flex-wrap:wrap;
+
     }
 
-    .paper-actions button{
+    .paper-actions button,
+    .paper-actions a{
 
         flex:1;
 

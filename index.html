@@ -94,11 +94,12 @@
 
     </a>
 
-    <div class="menu-toggle" id="menuToggle">
+    <div class="menu-toggle" id="menuToggle" role="button" tabindex="0" aria-label="Toggle navigation menu" aria-expanded="false">
     ☰
 </div>
 
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
 
     <!-- Clean Hero Header -->
     <header class="hero">
@@ -176,8 +177,11 @@
     <option value="BA">BA</option>
     <option value="B.Com">B.Com</option>
     <option value="B.Sc">B.Sc</option>
+    <option value="B.Ed">B.Ed</option>
+    <option value="LLB">LLB</option>
     <option value="MCA">MCA</option>
     <option value="MBA">MBA</option>
+    <option value="M.Sc">M.Sc</option>
 </select>
 
               <select id="semesterFilter">
@@ -195,10 +199,17 @@
 
                 <select id="yearFilter">
                     <option value="">All Years</option>
+                    <option value="2026">2026</option>
                     <option value="2025">2025</option>
                     <option value="2024">2024</option>
                     <option value="2023">2023</option>
                 </select>
+            </div>
+
+            <div class="filter-actions" id="filterActions" hidden>
+                <button type="button" id="clearFiltersBtn" class="clear-filters-btn">
+                    ✕ Reset Filters
+                </button>
             </div>
         </section>
 

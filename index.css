@@ -43,6 +43,7 @@
 html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
 }
 
 #about, #pyqGrid, #contribute, #contact {
@@ -54,7 +55,7 @@ body {
     background: var(--paper);
     color: var(--ink);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
 }
@@ -337,6 +338,34 @@ select {
 }
 
 select:focus, select:hover { outline: none; border-color: var(--sage); }
+
+.filter-actions {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filter-actions[hidden] {
+    display: none;
+}
+
+.clear-filters-btn {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--crimson);
+    background: var(--crimson-tint);
+    border: 1px solid rgba(162, 59, 59, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.clear-filters-btn:hover {
+    background: var(--crimson);
+    color: #fff;
+}
 
 /* ==========================================================
    PYQ GRID / CARDS  (structure from your v2, re-skinned)
@@ -831,7 +860,11 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
 }
 
 @media (max-width: 768px) {
-    .menu-toggle { display: flex; }
+    .menu-toggle {
+        display: flex;
+        position: relative;
+        z-index: 1002;
+    }
     .contribute-btn { display: none; }
 
     .nav-links {
@@ -841,6 +874,8 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
         height: 100vh;
         height: 100dvh;
         transform: translateX(100%);
+        visibility: hidden;
+        pointer-events: none;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -848,12 +883,16 @@ select:focus, select:hover { outline: none; border-color: var(--sage); }
         padding: calc(var(--nav-height) + 20px) 28px 28px;
         gap: 24px;
         box-shadow: -8px 0 30px rgba(22, 35, 61, 0.18);
-        transition: transform 0.3s ease;
-        z-index: 1000;
+        transition: transform 0.3s ease, visibility 0.3s ease;
+        z-index: 1001;
         overflow-y: auto;
     }
 
-    .nav-links.active { transform: translateX(0); }
+    .nav-links.active {
+        transform: translateX(0);
+        visibility: visible;
+        pointer-events: auto;
+    }
     .nav-links a { font-size: 1.02rem; width: 100%; }
 
     .nav-mobile-contribute {
